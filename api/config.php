@@ -4,7 +4,7 @@ declare(strict_types=1);
 $DB_HOST = 'localhost';
 $DB_NAME = 'webartec';
 $DB_USER = 'admin_webartec';
-$DB_PASS = 'AWPuyth@!e1obn29';
+$DB_PASS = '';
 
 $options = [
   PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -27,8 +27,8 @@ header('Access-Control-Allow-Headers: Content-Type, X-Requested-With');
 header('Access-Control-Allow-Methods: GET,POST,PUT,PATCH,DELETE,OPTIONS');
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { exit; }
 
-$MP_ACCESS_TOKEN = 'APP_USR-8944923871032962-101720-3b1313470d8e038422d78f9db9cf23bf-2353882800'; // use env var se preferir
-$MP_PUBLIC_KEY   = 'APP_USR-81f4ad69-a915-4125-bc9a-9669d9f8bf85';   // Client (TEST ou PROD)
+$MP_ACCESS_TOKEN = ''; // use env var se preferir
+$MP_PUBLIC_KEY   = '';   // Client (TEST ou PROD)
 
 $PLAN_DURATION_DAYS = 30;
 $PLANS = [
