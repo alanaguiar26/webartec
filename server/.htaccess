@@ -1,0 +1,4 @@
+# server/.htaccess — CSP recomendada (Apache)
+<IfModule mod_headers.c>
+Header set Content-Security-Policy "default-src 'self'; connect-src 'self' https://api.mercadopago.com https://sdk.mercadopago.com; script-src 'self' https://sdk.mercadopago.com 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://http2.mlstatic.com; font-src 'self' data:; frame-src https://www.mercadopago.com.br https://sdk.mercadopago.com; frame-ancestors 'self';"
+</IfModule>

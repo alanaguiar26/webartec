@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Checkout — Webartec</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png"/>
+  <link rel="stylesheet" href="static/styles.css">
+  <style>
+    .checkout-actions { display:flex; gap:10px; flex-wrap:wrap; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="container nav">
+    <div class="brand">
+      <a href="index.html" style="display:flex;align-items:center;gap:12px">
+        <img src="assets/logo.png" alt="Webartec"><h1>Webartec</h1>
+      </a>
+    </div>
+    <div class="actions"></div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container inner" style="grid-template-columns:1fr;">
+    <div>
+      <h2 class="title-xl">Checkout de Plano</h2>
+      <p class="sub">Pague com segurança via Mercado Pago. Ao aprovar, o plano é ativado automaticamente.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container grid-2">
+    <div class="form-card">
+      <h3 class="section-title">Plano selecionado</h3>
+      <p>Plano: <strong id="plan">-</strong></p>
+      <p class="help">Ao concluir, seu perfil ganha priorização correspondente ao plano.</p>
+      <div class="checkout-actions" style="margin-top:10px">
+        <button class="btn btn-blue" id="pay">Pagar com Mercado Pago</button>
+        <a class="btn btn-ghost" href="dashboard.html">Voltar ao painel</a>
+      </div>
+      <p class="help" id="msg" style="margin-top:8px"></p>
+    </div>
+    <div class="card">
+      <h3 class="section-title">Resumo</h3>
+      <ul>
+        <li><strong>Destaque:</strong> aparece no topo da cidade</li>
+        <li><strong>Exclusivo:</strong> badge “Exclusivo” + prioridade máxima (fale com vendas)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container" style="display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;">
+    <div class="brand">
+      <img src="assets/logo-white.png" alt="Webartec"/>
+      <span>© 2025 Webartec • Todos os direitos reservados</span>
+    </div>
+  </div>
+</footer>
+
+<script src="static/app.js"></script>
+<script src="static/session.js"></script>
+<script src="static/checkout.js"></script>
+</body>
+</html>

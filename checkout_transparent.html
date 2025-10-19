@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Checkout — Cartão | Webartec</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png"/>
+  <link rel="stylesheet" href="static/styles.css">
+  <link rel="stylesheet" href="static/mobile-fixes.css">
+</head>
+<body>
+<header>
+  <div class="container nav">
+    <div class="brand">
+      <a href="index.html" style="display:flex;align-items:center;gap:12px">
+        <img src="assets/logo.png" alt="Webartec"><h1>Webartec</h1>
+      </a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container inner" style="grid-template-columns:1fr;">
+    <div>
+      <h2 class="title-xl">Pagar com Cartão</h2>
+      <p class="sub">Pagamento transparente com Mercado Pago. Seus dados são tokenizados pela SDK do MP.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container grid-2">
+    <div class="form-card brick-wrap">
+      <h3 class="section-title">Plano selecionado</h3>
+      <p>Plano: <strong id="plan">-</strong></p>
+      <div class="checkout-summary">
+        <div>Valor a pagar:</div>
+        <div class="price" id="priceText">R$ 79,00</div>
+        <small id="billingNote"></small>
+      </div>
+      <div id="cardPaymentBrick_container"></div>
+      <p class="help" id="msg" style="margin-top:8px"></p>
+    </div>
+    <div class="card">
+      <h3 class="section-title">Resumo</h3>
+      <ul>
+        <li><strong>Destaque:</strong> aparece no topo da cidade</li>
+        <li><strong>Exclusivo:</strong> fale com vendas (sem checkout online)</li>
+      </ul>
+      <div style="margin-top:12px"><a href="dashboard.html" class="btn btn-ghost">Voltar ao painel</a></div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container" style="display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;">
+    <div class="brand">
+      <img src="assets/logo-white.png" alt="Webartec" style="height:22px;filter:invert(1)">
+      <span>© 2025 Webartec • Todos os direitos reservados</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://sdk.mercadopago.com/js/v2"></script>
+<script src="static/app.js"></script>
+<script src="static/session.js"></script>
+<script src="static/checkout_transparent.js"></script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+# server/.htaccess — CSP para Checkout (Edge/Chrome/Firefox)
+# Aplique no diretório raiz do site (ou VirtualHost). Remova quaisquer <meta http-equiv="Content-Security-Policy"> dos HTML.
+<IfModule mod_headers.c>
+Header set Content-Security-Policy "default-src 'self'; connect-src 'self' https://api.mercadopago.com https://sdk.mercadopago.com https://api.mercadolibre.com; script-src 'self' https://sdk.mercadopago.com https://http2.mlstatic.com 'unsafe-inline'; script-src-elem 'self' https://sdk.mercadopago.com https://http2.mlstatic.com 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://http2.mlstatic.com https://www.mercadolibre.com https://www.mercadolivre.com; font-src 'self' data: https://http2.mlstatic.com; frame-src https://sdk.mercadopago.com https://www.mercadopago.com https://www.mercadopago.com.br https://www.mercadolibre.com https://www.mercadolivre.com; worker-src 'self' blob:; frame-ancestors 'self';"
+</IfModule>

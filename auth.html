@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Entrar / Cadastrar — Webartec</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png"/>
+  <link rel="stylesheet" href="static/styles.css">
+  <style>
+    .plan-cards { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+    .plan-card { border:1px solid #E6ECF5; border-radius:14px; padding:14px; background:#fff; }
+    .plan-card h4 { margin:0 0 6px; }
+    .plan-card .price { font-weight:800; }
+    .plan-card .actions { margin-top:10px; display:flex; gap:8px; }
+    @media (max-width: 900px){ .plan-cards { grid-template-columns:1fr; } }
+    .selected { outline:2px solid var(--blue); }
+  </style>
+</head>
+<body>
+<header>
+  <div class="container nav">
+    <div class="brand">
+      <a href="index.html" style="display:flex;align-items:center;gap:12px">
+        <img src="assets/logo.png" alt="Webartec"><h1>Webartec</h1>
+      </a>
+    </div>
+    <div class="actions"></div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container inner">
+    <div>
+      <h2 class="title-xl">Entrar ou criar conta</h2>
+      <p class="sub">Acesse com e-mail e senha. Instaladores podem criar perfil completo.</p>
+    </div>
+    <div class="hero-card"><img src="assets/logo-white.png" alt="Webartec"></div>
+  </div>
+</section>
+
+<section id="cadastro-inst">
+  <div class="container grid-2">
+    <div class="form-card">
+      <h3 class="section-title">Login</h3>
+      <div class="form-grid">
+        <div><label>E-mail</label><input id="l_email" class="input" type="email" placeholder="voce@exemplo.com"/></div>
+        <div><label>Senha</label><input id="l_password" class="input" type="password" placeholder="••••••"/></div>
+      </div>
+      <button id="btnLogin" class="btn btn-blue" style="margin-top:12px">Entrar</button>
+      <p class="help" id="l_msg"></p>
+    </div>
+
+    <div class="form-card">
+      <h3 class="section-title">Criar conta de Instalador</h3>
+      <div class="form-grid">
+        <div><label>Seu nome</label><input id="i_name" class="input"/></div>
+        <div><label>E-mail</label><input id="i_email" class="input" type="email"/></div>
+        <div><label>Senha</label><input id="i_password" class="input" type="password"/></div>
+        <div><label>Empresa (nome fantasia)</label><input id="i_company" class="input"/></div>
+        <div><label>Cidade (UF)</label><input id="i_city" class="input"/></div>
+        <div><label>WhatsApp</label><input id="i_whatsapp" class="input" placeholder="5511999999999"/></div>
+        <div><label>Preço inicial (opcional)</label><input id="i_price" class="input" type="number"/></div>
+      </div>
+
+      <div style="margin-top:8px">
+        <label>Serviços</label>
+        <div class="form-grid-3">
+          <label><input type="checkbox" class="svc" value="Instalação split"> Instalação split</label>
+          <label><input type="checkbox" class="svc" value="Limpeza"> Limpeza</label>
+          <label><input type="checkbox" class="svc" value="Higienização"> Higienização</label>
+          <label><input type="checkbox" class="svc" value="Manutenção"> Manutenção</label>
+          <label><input type="checkbox" class="svc" value="Manutenção preventiva"> Manutenção preventiva</label>
+          <label><input type="checkbox" class="svc" value="VRF / Comercial"> VRF / Comercial</label>
+        </div>
+      </div>
+
+      <div style="margin-top:12px">
+        <label>Escolha seu plano</label>
+        <div class="plan-cards" id="planCards">
+          <div class="plan-card" data-plan="gratis">
+            <h4>Grátis</h4>
+            <div class="price">R$ 0/mês</div>
+            <ul>
+              <li>Perfil básico</li><li>Botão WhatsApp</li><li>1 cidade</li>
+            </ul>
+            <div class="actions"><button class="btn btn-ghost selectPlan">Selecionar</button></div>
+          </div>
+          <div class="plan-card" data-plan="destaque">
+            <h4>Destaque</h4>
+            <div class="price">R$ 79/mês</div>
+            <ul>
+              <li>Topo da cidade</li><li>Até 5 cidades</li><li>Fotos e avaliações</li><li>Relatórios</li>
+            </ul>
+            <div class="actions"><button class="btn btn-blue selectPlan">Quero este</button></div>
+          </div>
+          <div class="plan-card" data-plan="exclusivo">
+            <h4>Exclusivo</h4>
+            <div class="price">Consultar</div>
+            <ul>
+              <li>Exclusividade por cidade/bairro</li><li>Prioridade máxima</li><li>Suporte dedicado</li>
+            </ul>
+            <div class="actions"><button class="btn btn-blue selectPlan">Falar com vendas</button></div>
+          </div>
+        </div>
+        <input type="hidden" id="i_plan" value="gratis">
+        <p class="help">O plano pode ser atualizado depois no checkout.</p>
+      </div>
+
+      <button id="btnCreateInstaller" class="btn btn-red" style="margin-top:12px">Criar conta de instalador</button>
+      <p class="help" id="i_msg">A conta do instalador começa pendente de aprovação do admin.</p>
+    </div>
+  </div>
+
+  <div class="container" style="margin-top:18px">
+    <div class="form-card">
+      <h3 class="section-title">Criar conta de Cliente</h3>
+      <div class="form-grid">
+        <div><label>Seu nome</label><input id="c_name" class="input"/></div>
+        <div><label>E-mail</label><input id="c_email" class="input" type="email"/></div>
+        <div><label>Senha</label><input id="c_password" class="input" type="password"/></div>
+      </div>
+      <button id="btnCreateCustomer" class="btn btn-blue" style="margin-top:12px">Criar conta de cliente</button>
+      <p class="help" id="c_msg"></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container" style="display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;">
+    <div class="brand">
+      <img src="assets/logo-white.png" alt="Webartec"/>
+      <span>© 2025 Webartec • Todos os direitos reservados</span>
+    </div>
+  </div>
+</footer>
+
+<script src="static/app.js"></script>
+<script src="static/session.js"></script>
+<script src="static/auth.js"></script>
+</body>
+</html>

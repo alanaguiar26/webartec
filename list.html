@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Webartec — Buscar Técnicos</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png"/>
+  <link rel="stylesheet" href="static/styles.css">
+</head>
+<body>
+
+<header>
+  <div class="container nav">
+    <div class="brand">
+      <a href="index.html" style="display:flex;align-items:center;gap:12px">
+        <img src="assets/logo.png" alt="Webartec"><h1>Webartec</h1>
+      </a>
+    </div>
+    <div class="actions">
+      <a class="btn btn-ghost" href="#planos">Planos</a>
+      <a class="btn btn-blue" href="auth.html">Entrar</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero" id="buscar">
+  <div class="container inner">
+    <div>
+      <span class="badge">Encontre técnico de ar-condicionado</span>
+      <h2 class="title-xl">Buscar técnicos por cidade e serviço</h2>
+      <p class="sub">Filtre por cidade, tipo de serviço e ordene por preço ou avaliação.</p>
+      <div class="search">
+        <input id="q" class="input" type="text" placeholder="Digite sua cidade, bairro ou CEP"/>
+        <select id="svc" class="input">
+          <option value="">Todos os serviços</option>
+          <option>Instalação split</option>
+          <option>Limpeza</option>
+          <option>Higienização</option>
+          <option>Manutenção</option>
+          <option>Manutenção preventiva</option>
+          <option>VRF / Comercial</option>
+        </select>
+        <select id="ordena" class="input">
+          <option value="relevancia">Ordenar por relevância</option>
+          <option value="rating">Maior avaliação</option>
+          <option value="preco">Menor preço</option>
+        </select>
+        <button id="btnBuscar" class="btn btn-red">Buscar técnicos</button>
+      </div>
+    </div>
+    <div class="hero-card">
+      <img src="assets/logo-white.png" alt="Webartec">
+    </div>
+  </div>
+</section>
+
+<section class="results">
+  <div class="container">
+    <div class="controls">
+      <span id="filtrocidade" class="filter">Brasil</span>
+      <span id="filtrosvc" class="filter">Todos os serviços</span>
+      <select id="perpage" class="select">
+        <option value="6" selected>6 por página</option>
+        <option value="8">8 por página</option>
+        <option value="12">12 por página</option>
+      </select>
+    </div>
+
+    <div id="cards" class="grid"></div>
+    <div id="paginas" class="pagination"></div>
+  </div>
+</section>
+
+<section id="planos" class="plans">
+  <div class="container">
+    <h3 class="section-title">Planos para instaladores</h3>
+    <div class="plan-grid">
+      <div class="plan">
+        <h4>Grátis</h4>
+        <div class="price">R$ 0/mês</div>
+        <ul><li>Perfil básico</li><li>WhatsApp</li><li>1 cidade</li></ul>
+        <a class="btn btn-ghost" href="auth.html#cadastro-inst">Começar grátis</a>
+      </div>
+      <div class="plan pop">
+        <h4>Destaque</h4>
+        <div class="price">R$ 79/mês</div>
+        <ul><li>Topo da cidade</li><li>Até 5 cidades</li><li>Fotos e avaliações</li><li>Relatórios</li></ul>
+        <a class="btn btn-blue" href="checkout.html?plan=destaque">Quero destaque</a>
+      </div>
+      <div class="plan">
+        <h4>Exclusividade</h4>
+        <div class="price">Consultar</div>
+        <ul><li>Exclusividade por cidade</li><li>Prioridade máxima</li><li>Suporte dedicado</li></ul>
+        <a class="btn btn-red" href="checkout.html?plan=exclusivo">Falar com vendas</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container" style="display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;">
+    <div class="brand">
+      <img src="assets/logo-white.png" alt="Webartec"/>
+      <span>© 2025 Webartec • Todos os direitos reservados</span>
+    </div>
+  </div>
+</footer>
+
+<script src="static/app.js"></script>
+<script src="static/list.js"></script>
+</body>
+</html>

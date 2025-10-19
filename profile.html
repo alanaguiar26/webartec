@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Perfil do Instalador — Webartec</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png"/>
+  <link rel="stylesheet" href="static/styles.css">
+</head>
+<body>
+
+<header>
+  <div class="container nav">
+    <div class="brand">
+      <a href="list.html" style="display:flex;align-items:center;gap:12px">
+        <img src="assets/logo.png" alt="Webartec"><h1>Webartec</h1>
+      </a>
+    </div>
+    <div class="actions">
+      <a class="btn btn-ghost" href="list.html#buscar">Buscar</a>
+      <a class="btn btn-blue" href="auth.html">Entrar</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container inner">
+    <div>
+      <h2 class="title-xl" id="name">Perfil</h2>
+      <p class="sub" id="meta"></p>
+      <div class="cta-row">
+        <a id="wa" class="btn btn-wa" target="_blank" rel="noopener">Chamar no WhatsApp</a>
+        <a class="btn btn-blue" href="list.html#buscar">Buscar outros técnicos</a>
+      </div>
+    </div>
+    <div class="hero-card">
+      <img src="assets/logo-white.png" alt="Webartec">
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h3 class="section-title">Serviços e informações</h3>
+    <div class="card" id="info"></div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h3 class="section-title">Avaliações</h3>
+    <div id="reviews" class="card"></div>
+
+    <div id="reviewForm" class="form-card" style="margin-top:14px; display:none">
+      <h4>Deixe sua avaliação</h4>
+      <div class="form-grid">
+        <div>
+          <label>Nota (1 a 5)</label>
+          <input id="r_rating" class="input" type="number" min="1" max="5" value="5">
+        </div>
+        <div style="grid-column:1 / -1">
+          <label>Comentário</label>
+          <textarea id="r_comment" class="input" rows="3" placeholder="Conte sua experiência"></textarea>
+        </div>
+      </div>
+      <button id="r_send" class="btn btn-blue" style="margin-top:10px">Enviar avaliação</button>
+      <p class="help">Sua avaliação passará por moderação.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container" style="display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;">
+    <div class="brand">
+      <img src="assets/logo-white.png" alt="Webartec"/>
+      <span>© 2025 Webartec • Todos os direitos reservados</span>
+    </div>
+  </div>
+</footer>
+
+<script src="static/app.js"></script>
+<script src="static/profile.js"></script>
+</body>
+</html>

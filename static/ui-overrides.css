@@ -1,0 +1,128 @@
+/* static/ui-overrides.css — polimento final (carregar por ÚLTIMO) */
+:root{
+  --blue:#005BBF; --red:#E31B23; --dark:#0A1A2A; --text:#1F2A44; --muted:#5A6B87; --bg:#F6F8FC; --border:#E6ECF5;
+}
+
+/* Header com blur e safe-area no iOS */
+header{
+  background: rgba(255,255,255,.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 4px 18px rgba(10,26,42,.04);
+  padding-top: env(safe-area-inset-top, 0);
+}
+.nav { padding: 12px 0; }
+.brand strong { color: var(--dark); font-size: 18px; letter-spacing: .2px; }
+
+/* Botões */
+.btn { border-radius: 12px; font-weight: 700; }
+.btn-ghost { background: #fff; border: 1px solid #E4E8F0; color: var(--text) }
+.btn-blue { background: var(--blue); color: #fff }
+.btn-red { background: var(--red); color: #fff }
+.btn-wa { background: #20B657; color:#fff }
+
+/* Badge/etiquetas */
+.badge { display:inline-flex; align-items:center; gap:8px; background:#EEF4FF; color:#1749A1;
+  font-weight:700; padding:8px 12px; border-radius:999px; font-size:13px; }
+
+/* Títulos/cores */
+.title-xl { color: var(--text); }
+.sub { color: var(--muted); }
+
+/* Cartões levemente elevados */
+.card, .form-card { box-shadow: 0 8px 24px rgba(0,0,0,.04); }
+
+/* Espaçamento extra sob header sticky — só no 1º bloco */
+.hero:first-of-type .inner { margin-top: 4px; }
+
+/* Colisão zero com as laterais no mobile */
+@media (max-width: 900px){
+  .container { padding-left: 16px; padding-right: 16px; }
+  .nav .actions a { padding: 10px 12px; }
+  .hero .inner { padding-top: 28px; padding-bottom: 24px; }
+  .title-xl { margin-top: 2px; }
+}
+
+/* Desktop mais largo */
+@media (min-width: 1200px){
+  .container { max-width: 1160px; }
+}
+
+/* --- HERO: respiro mobile no primeiro bloco --- */
+@media (max-width: 900px){
+  .hero { padding: 20px; }
+
+  .hero .inner { 
+    padding: 22px 0 24px;
+    row-gap: 14px;
+  }
+  .hero .badge { margin: 2px 0 10px; }
+
+  .hero .title-xl, .hero h2 {
+    margin: 6px 0 10px;
+    line-height: 1.2;
+  }
+  .hero .sub { margin: 6px 0 14px; }
+
+  .cta-row { margin-top: 12px; gap: 10px; }
+  .cta-row .btn { width: 100%; text-align: center; }
+
+  .hero-banner {
+    margin-top: 14px;
+    height: 180px;
+    border-radius: 18px;
+    display: grid;
+    place-items: center;
+    padding: 8px;
+    text-align: center;
+    background: linear-gradient(170deg, #0F1D33, #0B1730);
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(0,0,0,.08);
+  }
+  .hero-banner small { opacity: .85; }
+}
+
+@media (min-width: 901px){
+  .hero .inner { padding: 56px 0; gap: 32px; }
+}
+
+/* === HEADER MOBILE COMPACT === */
+@media (max-width: 900px){
+  header .container { padding-left: 12px; padding-right: 12px; }
+  header .nav { padding: 8px; }
+
+  /* esconde texto 'Webartec' no mobile, deixa só o ícone */
+  header .brand strong,
+  header .brand h1 { display: none; }
+  header .brand img { height: 24px; }
+
+  /* linha de ações: compacta botões */
+  header .nav .actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: nowrap;
+    overflow: hidden;
+  }
+  header .nav .actions .btn {
+    padding: 7px 10px;
+    font-size: 13px;
+    border-radius: 10px;
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+  header .nav .actions .btn-ghost { padding: 7px 10px; }
+
+  /* se houver mais de 2 botões, esconda os extras para não quebrar layout */
+  header .nav .actions .btn:nth-child(n+3){
+    display: none;
+  }
+}
+
+/* ultra-compacto para telas muito pequenas */
+@media (max-width: 360px){
+  header .nav .actions .btn {
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+}

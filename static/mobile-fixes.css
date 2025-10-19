@@ -1,0 +1,78 @@
+/* static/mobile-fixes.css — foco em mobile spacing e grids */
+:root {
+  --blue:#005BBF; --red:#E31B23; --dark:#0A1A2A; --text:#1F2A44; --muted:#5A6B87; --bg:#F6F8FC; --border:#E6ECF5;
+}
+
+/* Base mobile */
+html, body { height: 100%; background: var(--bg); }
+* { -webkit-tap-highlight-color: transparent; }
+.container { max-width:1120px; margin:0 auto; padding:0 16px; }
+
+/* Header baseline no mobile: mais compacto, porém com respiro */
+header { position: sticky; top: 0; z-index: 50; }
+.nav { display:flex; align-items:center; justify-content:space-between; padding:12px 0; gap:12px; }
+.brand { display:flex; align-items:center; gap:10px; }
+.brand img { height:28px; }
+
+/* Hero no mobile com respiro superior/inf. */
+.hero .inner {
+  display:grid; grid-template-columns: 1fr; gap:18px;
+  padding: 28px 0 24px;
+}
+
+/* Título/descrição com tamanhos responsivos */
+.title-xl { font-size: clamp(22px, 5.5vw, 34px); line-height: 1.15; margin: 2px 0 10px; }
+.sub { color: var(--muted); margin: 0 0 14px; }
+
+/* CTA: botões empilhados e com largura total no mobile */
+.cta-row { display:flex; flex-wrap:wrap; gap:10px; }
+@media (max-width: 900px){
+  .cta-row .btn { width:100%; text-align:center; }
+}
+
+/* Banner da direita com altura menor no mobile + respiro */
+.hero-banner {
+  background: linear-gradient(170deg, #0F1D33, #0B1730);
+  color:#fff; border-radius: 18px; height: 180px;
+  display:grid; place-items:center;
+  box-shadow: 0 8px 24px rgba(0,0,0,.08);
+  padding: 8px; text-align:center;
+}
+.hero-banner small { opacity:.85 }
+
+/* Seções: mais respiro, porém equilibrado */
+.section { padding: 36px 0; }
+h3.section-title { margin: 0 0 14px; }
+
+/* Grids viram 1 coluna no mobile */
+.grid-2, .plan-grid { display:grid; gap:16px; }
+.grid-2 { grid-template-columns: 1fr; }
+.plan-grid { grid-template-columns: 1fr; }
+.grid { display:grid; gap:16px; grid-template-columns: 1fr; }
+
+.card, .form-card {
+  background:#fff; border:1px solid var(--border);
+  border-radius: 14px; padding: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.04);
+}
+
+/* Chips/cities com respiro */
+.chips { display:flex; gap:10px; flex-wrap:wrap; }
+.chip { padding:10px 14px; border-radius:999px; border:1px solid #E1E7F1; background:#fff; font-weight:600; }
+
+/* Footer ligeiramente mais compacto no mobile */
+.footer { padding: 22px 0; }
+
+/* Desktop (>=900px) volta pro seu layout comum */
+@media (min-width: 900px){
+  .container { padding: 0 20px; }
+  .hero .inner { grid-template-columns: 1.2fr .8fr; padding: 56px 0; gap: 32px; }
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+  .plan-grid { grid-template-columns: repeat(3, 1fr); }
+  .grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* Vitrine home: 3 col desktop, 2 col tablet, 1 col mobile */
+#dh-grid.grid { grid-template-columns: 1fr; }
+@media (min-width: 680px){ #dh-grid.grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1024px){ #dh-grid.grid { grid-template-columns: 1fr 1fr 1fr; } }
