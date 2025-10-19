@@ -126,3 +126,18 @@ header{
     font-size: 12px;
   }
 }
+/* Tabs de filtro (home vitrine) */
+.dh-tab {
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-weight: 700;
+}
+.dh-tab.active {
+  background: var(--blue);
+  color: #fff;
+  border-color: var(--blue);
+}
+.dh-tab:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
