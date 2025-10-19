@@ -1,43 +1,53 @@
-<?php
-require_once __DIR__ . '/../util/mail.php';
-// api/admin/approve.php
-// Toggle approval status for installer (admin only).
-declare(strict_types=1);
+<?php declare(strict_types=1);
+
+// api/admin/approve.php — Alterna/define aprovação de instalador (apenas admin)
+session_start();
 header('Content-Type: application/json; charset=utf-8');
 
 require_once __DIR__ . '/../config.php';
-require_once __DIR__ . '/../session.php';
 
-// Require admin session
+// Requer sessão de admin
 if (!isset($_SESSION['user']) || ($_SESSION['user']['role'] ?? '') !== 'admin') {
   http_response_code(403);
-  echo json_encode(['error'=>'forbidden']); exit;
+  echo json_encode(['error' => 'forbidden']);
+  exit;
 }
 
-// Parse JSON body
-$raw = file_get_contents('php://input');
-$payload = json_decode($raw, true);
-$id = isset($payload['id']) ? (int)$payload['id'] : 0;
-$approved = isset($payload['approved']) ? (int)$payload['approved'] : -1;
+// Lê JSON ou FORM
+$ct = $_SERVER['CONTENT_TYPE'] ?? '';
+$in = [];
+if ($ct && stripos($ct, 'application/json') !== false) {
+  $raw = file_get_contents('php://input');
+  $in = json_decode($raw, true) ?: [];
+} else {
+  $in = $_POST ?: [];
+}
 
-if ($id <= 0 || ($approved !== 0 && $approved !== 1)) {
+$id = (int)($in['id'] ?? 0);
+$approvedParam = $in['approved'] ?? null; // se null, vamos alternar
+
+if ($id <= 0) {
   http_response_code(400);
-  echo json_encode(['error'=>'invalid_params']); exit;
+  echo json_encode(['error' => 'invalid_id']);
+  exit;
 }
 
 try {
-  $stmt = $pdo->prepare("UPDATE installers SET approved = ?, updated_at = NOW() WHERE id = ?");
-  $stmt->execute([$approved, $id]);
-  // notify user when approved
-  if($approved===1){
-    $q = $pdo->prepare("SELECT u.email,u.name FROM installers i JOIN users u ON u.id=i.user_id WHERE i.id=? LIMIT 1");
-    $q->execute([$id]);
-    $u = $q->fetch(PDO::FETCH_ASSOC);
-    if($u){ @send_html_mail($u['email'], 'Sua conta foi aprovada', '<p>Olá '+htmlspecialchars($u['name'])+', sua conta foi aprovada! Já pode receber contatos.</p>'); }
+  // Descobre novo valor: se não veio "approved", alterna
+  if ($approvedParam === null || $approvedParam === '') {
+    $st = $pdo->prepare('SELECT approved FROM installers WHERE id = ? LIMIT 1');
+    $st->execute([$id]);
+    $current = (int)$st->fetchColumn();
+    $new = $current ? 0 : 1;
+  } else {
+    $new = ((int)$approvedParam === 1) ? 1 : 0;
   }
 
-  echo json_encode(['ok'=>true, 'id'=>$id, 'approved'=>$approved]);
+  $up = $pdo->prepare('UPDATE installers SET approved = ?, updated_at = NOW() WHERE id = ?');
+  $up->execute([$new, $id]);
+
+  echo json_encode(['ok' => true, 'id' => $id, 'approved' => $new]);
 } catch (Throwable $e) {
   http_response_code(500);
-  echo json_encode(['error'=>'db_error','message'=>$e->getMessage()]);
+  echo json_encode(['error' => 'db_error', 'message' => $e->getMessage()]);
 }
