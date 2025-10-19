@@ -1,4 +1,4 @@
-// static/index.js — vitrine (apenas pagos), rating 0 oculto, geolocalização cidade
+// static/index.js — vitrine (apenas pagos), rating 0 oculto, fallback nacional, tabs com estado
 (async function(){
   const grid = document.getElementById('dh-grid');
   const cityInput = document.getElementById('dh-city'); // input
@@ -7,11 +7,11 @@
 
   function esc(s){ return String(s||'').replace(/[&<>"]/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;' }[c])); }
 
-  function buildParams(city){
+  function buildParams({ city='', per=6 } = {}){
     const p = new URLSearchParams();
     if (city) p.set('q', city);
     p.set('order', 'relevancia');
-    p.set('per', '6');
+    p.set('per', String(per));
     p.set('paid_only', '1'); // VITRINE = só pagos
     return p.toString();
   }
@@ -57,23 +57,50 @@
       </div>`;
   }
 
-  function render(items){
+  function emptyState(message, cta=true){
+    return `
+      <div class="card" style="grid-column:1/-1">
+        <strong>${esc(message)}</strong>
+        <p class="muted" style="margin:6px 0 0">
+          Mostramos abaixo destaques nacionais quando não há anúncios pagos nessa cidade.
+        </p>
+        ${cta ? `<p style="margin:10px 0 0"><a class="btn btn-blue" href="cadastro_instalador.html">Sou instalador — aparecer aqui</a></p>` : ''}
+      </div>
+    `;
+  }
+
+  function render(items, {showEmpty=false, emptyMsg=''} = {}){
     const filtered = items.filter(inCat);
-    grid.innerHTML = (filtered.length? filtered : items).slice(0,6).map(card).join('');
+    const base = (filtered.length ? filtered : items).slice(0,6);
+    grid.innerHTML =
+      (base.length ? base.map(card).join('') : '') +
+      (!base.length && showEmpty ? emptyState(emptyMsg) : '');
   }
 
   async function load(cityText){
     try{
-      const params = buildParams(cityText);
-      const j = await fetchList(params);
-      render(j.items || []);
+      // 1) Tenta cidade
+      const city = (cityText||'').trim();
+      const pCity = buildParams({ city, per: 6 });
+      const jCity = await fetchList(pCity);
+
+      if ((jCity.items||[]).length){
+        render(jCity.items||[]);
+        return;
+      }
+
+      // 2) Fallback nacional (sem q)
+      const pBr = buildParams({ city:'', per: 6 });
+      const jBr = await fetchList(pBr);
+      render(jBr.items||[], { showEmpty:true, emptyMsg:`Nenhum destaque em ${city||'sua cidade'}` });
+
     }catch(e){
       console.error(e);
       grid.innerHTML = '<p class="muted">Falha ao carregar destaques.</p>';
     }
   }
 
-  // Tabs
+  // Tabs (ativo visual + filtro)
   tabs.forEach(btn => btn.addEventListener('click', ()=>{
     tabs.forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
