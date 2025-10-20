@@ -1,54 +1,84 @@
-// static/index.js — vitrine (apenas pagos), rating 0 oculto, fallback nacional, tabs com estado
-(async function(){
+// static/index.js — vitrine da home (somente pagos) + geolocalização por clique
+(async function () {
   const grid = document.getElementById('dh-grid');
-  const cityInput = document.getElementById('dh-city'); // input
+  const cityInput = document.getElementById('dh-city'); // é um <input>
   const tabs = Array.from(document.querySelectorAll('.dh-tab'));
+  const geoBtn = document.getElementById('dh-geo'); // se existir um botão "Usar minha localização"
   let activeCat = 'instalacao';
 
-  function esc(s){ return String(s||'').replace(/[&<>"]/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;' }[c])); }
+  if (!grid) { console.warn('[index.js] #dh-grid não encontrado'); return; }
 
-  function buildParams({ city='', per=6 } = {}){
+  // ------- helpers
+  function escapeHtml(s){
+    return String(s || '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  }
+
+  function buildSvcChips(list){
+    const S = Array.isArray(list) ? list : [];
+    const out = [];
+    for (const sRaw of S) {
+      const s = String(sRaw||'').toLowerCase();
+      if (/instala/.test(s))            out.push({label:'Instalação',    cls:'chip-instalacao'});
+      else if (/limpez/.test(s))        out.push({label:'Limpeza',       cls:'chip-limpeza'});
+      else if (/higieniz/.test(s))      out.push({label:'Higienização',  cls:'chip-higienizacao'});
+      else if (/manuten/.test(s))       out.push({label:'Manutenção',    cls:'chip-manutencao'});
+      else if (/preventiv/.test(s))     out.push({label:'Preventiva',    cls:'chip-preventiva'});
+      else if (/vrf|comercial/.test(s)) out.push({label:'Comercial/VRF', cls:'chip-vrf'});
+    }
+    const seen = new Set();
+    const uniq = out.filter(x => !seen.has(x.label) && seen.add(x.label));
+    if (!uniq.length) return '';
+    return `<div class="svc-chips">${uniq.map(x=>`<span class="chip-svc ${x.cls}">${x.label}</span>`).join('')}</div>`;
+  }
+
+  function buildParams({ q, svc, order='relevancia', per=6, page=1, paidOnly=true }){
     const p = new URLSearchParams();
-    if (city) p.set('q', city);
-    p.set('order', 'relevancia');
+    if (q)     p.set('q', q);
+    if (svc)   p.set('svc', svc);
+    p.set('order', order);
     p.set('per', String(per));
-    p.set('paid_only', '1'); // VITRINE = só pagos
+    p.set('page', String(page));
+    if (paidOnly) p.set('paid_only', '1'); // vitrine: somente pagos
     return p.toString();
   }
 
   async function fetchList(params){
     const r = await fetch('api/installers/list.php?' + params);
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    return await r.json();
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
   }
 
-  function inCat(x){
-    const svcs = Array.isArray(x.services) ? x.services : [];
-    if(activeCat==='instalacao')  return svcs.includes('instalacao') || svcs.some(s=>/instala/i.test(s));
-    if(activeCat==='limpeza')     return svcs.includes('limpeza')    || svcs.some(s=>/limpeza|higieniza/i.test(s));
-    if(activeCat==='manutencao')  return svcs.includes('manutencao') || svcs.some(s=>/manuten/i.test(s));
-    if(activeCat==='vrf')         return svcs.includes('vrf')        || svcs.some(s=>/vrf|comercial/i.test(s));
-    return true;
+  function render(items){
+    const filtered = items.filter(x => {
+      const svcs = Array.isArray(x.services) ? x.services : [];
+      if(activeCat==='instalacao')  return svcs.some(s=>/instala/i.test(s));
+      if(activeCat==='limpeza')     return svcs.some(s=>/limpeza|higieniza/i.test(s));
+      if(activeCat==='manutencao')  return svcs.some(s=>/manuten/i.test(s));
+      if(activeCat==='vrf')         return svcs.some(s=>/vrf|comercial/i.test(s));
+      return true;
+    });
+    grid.innerHTML = (filtered.length? filtered : items).slice(0,6).map(card).join('');
   }
 
   function card(x){
-    const services = Array.isArray(x.services) ? x.services.join(', ') : '';
+    const services = Array.isArray(x.services) ? x.services : [];
     const priceTxt = (x.price==null) ? 'Sob consulta' : ('A partir de R$ ' + Number(x.price).toFixed(0));
-    const rating   = Number(x.rating||0);
-    const ratingHtml = rating > 0 ? `<div class="rating">${WA.star(rating)} <span>${rating.toFixed(1)}</span></div>` : '';
-    const planTag = (x.plan && x.plan!=='gratis') ? `<span class="badge-tag">Plano ${esc(x.plan)}</span>` : '';
+    const ratingVal = Number(x.rating || x.rating_avg || 0);
+    const ratingHtml = ratingVal > 0 ? `<div class="rating">${WA.star(ratingVal)} <span>${ratingVal.toFixed(1)}</span></div>` : '';
+    const chipsHtml = buildSvcChips(services);
 
     return `
       <div class="card-list">
         <div class="card-head">
           <div class="title">
-            <strong>${esc(x.name || x.company_name || 'Instalador')}</strong>
-            ${x.badge ? `<span class="badge-tag">${esc(x.badge)}</span>` : ''}
-            ${planTag}
+            <strong>${escapeHtml(x.name || x.company_name || 'Instalador')}</strong>
+            ${x.badge ? `<span class="badge-tag">${escapeHtml(x.badge)}</span>` : ''}
+            ${x.plan && x.plan!=='gratis' ? `<span class="badge-tag">Plano ${escapeHtml(x.plan)}</span>` : ''}
           </div>
           ${ratingHtml}
         </div>
-        <div class="meta">${esc(x.city||'-')} • ${esc(services)}</div>
+        <div class="meta">${escapeHtml(x.city||'-')}</div>
+        ${chipsHtml}
         <div class="price-strong">${priceTxt}</div>
         <div class="actions">
           <a class="btn btn-ghost" href="profile.html?id=${encodeURIComponent(x.id)}">Ver perfil</a>
@@ -57,50 +87,19 @@
       </div>`;
   }
 
-  function emptyState(message, cta=true){
-    return `
-      <div class="card" style="grid-column:1/-1">
-        <strong>${esc(message)}</strong>
-        <p class="muted" style="margin:6px 0 0">
-          Mostramos abaixo destaques nacionais quando não há anúncios pagos nessa cidade.
-        </p>
-        ${cta ? `<p style="margin:10px 0 0"><a class="btn btn-blue" href="cadastro_instalador.html">Sou instalador — aparecer aqui</a></p>` : ''}
-      </div>
-    `;
-  }
-
-  function render(items, {showEmpty=false, emptyMsg=''} = {}){
-    const filtered = items.filter(inCat);
-    const base = (filtered.length ? filtered : items).slice(0,6);
-    grid.innerHTML =
-      (base.length ? base.map(card).join('') : '') +
-      (!base.length && showEmpty ? emptyState(emptyMsg) : '');
-  }
-
   async function load(cityText){
     try{
-      // 1) Tenta cidade
-      const city = (cityText||'').trim();
-      const pCity = buildParams({ city, per: 6 });
-      const jCity = await fetchList(pCity);
-
-      if ((jCity.items||[]).length){
-        render(jCity.items||[]);
-        return;
-      }
-
-      // 2) Fallback nacional (sem q)
-      const pBr = buildParams({ city:'', per: 6 });
-      const jBr = await fetchList(pBr);
-      render(jBr.items||[], { showEmpty:true, emptyMsg:`Nenhum destaque em ${city||'sua cidade'}` });
-
+      // vitrine: sempre pagos
+      const params = buildParams({ q: cityText, paidOnly:true, per:6, page:1 });
+      const j = await fetchList(params);
+      render(j.items || []);
     }catch(e){
       console.error(e);
       grid.innerHTML = '<p class="muted">Falha ao carregar destaques.</p>';
     }
   }
 
-  // Tabs (ativo visual + filtro)
+  // Tabs
   tabs.forEach(btn => btn.addEventListener('click', ()=>{
     tabs.forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
@@ -108,26 +107,26 @@
     load(cityInput?.value || '');
   }));
 
-  // Cidade digitada
+  // City change
   cityInput?.addEventListener('change', ()=>load(cityInput.value||''));
 
-  // Geolocalização -> apenas nome da cidade
-  try{
-    if(navigator.geolocation){
+  // Geolocalização SOMENTE após gesto do usuário
+  geoBtn?.addEventListener('click', async ()=>{
+    try{
+      if (!navigator.geolocation) return;
       const pos = await new Promise((res,rej)=>navigator.geolocation.getCurrentPosition(res,rej,{enableHighAccuracy:true, timeout:5000}));
       const { latitude, longitude } = pos.coords || {};
       const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`;
       const j = await fetch(url, { headers:{'Accept':'application/json'} }).then(r=>r.json());
-      const a = j.address || {};
-      const city = a.city || a.town || a.village || a.county || '';
+      const addr = j.address || {};
+      const city = addr.city || addr.town || addr.village || addr.county || '';
       if(city){
         if(cityInput) cityInput.value = city;
         await load(city);
-        return;
       }
-    }
-  }catch{ /* ignora */ }
+    }catch(e){ /* silencioso */ }
+  });
 
-  // fallback: sem cidade
+  // Primeira carga sem pedir geolocalização
   load('');
 })();
