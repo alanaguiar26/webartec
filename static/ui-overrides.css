@@ -141,3 +141,16 @@ header{
   border-color: var(--blue);
 }
 .dh-tab:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+
+/* --- Chips de serviços (cards) --- */
+.svc-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.chip-svc{padding:6px 10px;border-radius:999px;font-weight:700;font-size:12px;line-height:1}
+
+/* Paleta por serviço */
+.chip-instalacao{background:#E8F3FF;color:#0B4DA6}     /* azul claro */
+.chip-limpeza{background:#E8FFF2;color:#066A3B}        /* verde claro */
+.chip-higienizacao{background:#FFF5E6;color:#8A4B00}   /* laranja claro */
+.chip-manutencao{background:#F3E8FF;color:#6A0BA6}     /* roxo claro */
+.chip-preventiva{background:#EAF0FF;color:#2B3A67}     /* azul acinzentado */
+.chip-vrf{background:#FFE8F1;color:#A60B5A}            /* magenta claro */
